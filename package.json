@@ -1,0 +1,11 @@
+{
+  "name": "expense-sharing-backend-zerodeps",
+  "version": "1.0.0",
+  "description": "Zero-dependency expense sharing backend",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT"
+}
