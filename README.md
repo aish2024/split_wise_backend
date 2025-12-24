@@ -1,32 +1,52 @@
-# Expense Sharing Backend (Zero Dependencies)
+# Expense Sharing Backend
 
-This project is built to match the assignment requirements:
-- Create groups, add shared expenses, track balances (who owes whom), settle dues
-- Split types: **equal**, **exact**, **percentage**
-- Balances are **simplified** (netted) per group
+This backend is built for the expense-sharing assignment. It supports creating groups, adding shared expenses, tracking group-wise balances (who owes whom), and recording settlements.
 
-✅ **No `npm install` needed** (uses only Node.js built-in modules).
+It uses only Node.js built-in modules, so there is no dependency installation required.
+
+## Features
+- Create users and groups
+- Add shared expenses inside a group
+- Split types supported:
+  - equal
+  - exact
+  - percentage
+- Group balances are simplified (netted) to show who owes whom
+- Record settlements to reduce outstanding balances
+- Reset endpoint to clear data for demos
 
 ## Requirements
-- Node.js 18+ (you have Node 24.x, so you're good)
+- Node.js 18+ (Node 24.x also works)
 
-## Run (Windows / Mac / Linux)
-### Option 1 (recommended)
+## How to Run
+From the project directory:
+
+Option 1:
 ```bash
 node server.js
 ```
 
-### Option 2
+Option 2:
 ```bash
 npm start
 ```
-(`npm start` works without installing anything because there are no dependencies.)
 
-Server runs on: `http://localhost:5000`
+Server runs at:
+http://localhost:5000
 
-## Quick endpoints
-- `GET /health`
-- `GET /` (mini docs)
+## Endpoints
+- GET /health
+- GET / (basic API info)
+- POST /users
+- GET /users
+- POST /groups
+- POST /expenses
+- GET /groups/:groupId/balances
+- GET /users/:userId/summary?groupId=...
+- POST /settlements
+- POST /admin/reset
+
+## Example Usage (cURL)
 
 ### Create users
 ```bash
@@ -41,7 +61,8 @@ curl -X POST http://localhost:5000/groups -H "Content-Type: application/json" -d
 ```
 
 ### Add expenses
-#### Equal split
+
+Equal split
 ```bash
 curl -X POST http://localhost:5000/expenses -H "Content-Type: application/json" -d "{
   \"groupId\":\"<GROUP_ID>\",
@@ -52,7 +73,7 @@ curl -X POST http://localhost:5000/expenses -H "Content-Type: application/json" 
 }"
 ```
 
-#### Exact split
+Exact split
 ```bash
 curl -X POST http://localhost:5000/expenses -H "Content-Type: application/json" -d "{
   \"groupId\":\"<GROUP_ID>\",
@@ -70,7 +91,7 @@ curl -X POST http://localhost:5000/expenses -H "Content-Type: application/json" 
 }"
 ```
 
-#### Percentage split
+Percentage split
 ```bash
 curl -X POST http://localhost:5000/expenses -H "Content-Type: application/json" -d "{
   \"groupId\":\"<GROUP_ID>\",
@@ -88,18 +109,18 @@ curl -X POST http://localhost:5000/expenses -H "Content-Type: application/json" 
 }"
 ```
 
-### View simplified balances (who owes whom)
+### View simplified balances
 ```bash
 curl http://localhost:5000/groups/<GROUP_ID>/balances
 ```
 
-### View a user's summary in the group
+### View a user summary in a group
 ```bash
 curl "http://localhost:5000/users/<ALICE_ID>/summary?groupId=<GROUP_ID>"
 ```
 
 ### Settle dues
-First check balances, then settle exactly that direction:
+Check balances first, then settle in the same direction shown:
 ```bash
 curl -X POST http://localhost:5000/settlements -H "Content-Type: application/json" -d "{
   \"groupId\":\"<GROUP_ID>\",
@@ -109,11 +130,12 @@ curl -X POST http://localhost:5000/settlements -H "Content-Type: application/jso
 }"
 ```
 
-### Reset everything (for demo/testing)
+### Reset data 
 ```bash
 curl -X POST http://localhost:5000/admin/reset
 ```
 
 ## Notes
-- Data is stored in-memory (no DB). Restarting the server resets data.
-- All amounts are handled in **cents** internally to avoid rounding issues.
+- Data is stored in-memory (no database). Restarting the server resets all data.
+- Amounts are handled in cents internally to reduce rounding issues.
+
